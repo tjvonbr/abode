@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  output   = "./generated/prisma"
 }
 
 datasource db {
@@ -25,7 +25,6 @@ model User {
   lastName  String
   email     String   @unique
   phone     String
-  password  String
   role      Role     @default(USER)
   homes     Home[]
   createdAt DateTime @default(now())
