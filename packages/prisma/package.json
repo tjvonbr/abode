@@ -6,9 +6,13 @@
     "build": "tsc"
   },
   "exports": {
-    "./add": {
+    "./client": {
       "types": "./src/prisma.ts",
       "default": "./dist/prisma.js"
+    },
+    "./types": {
+      "types": "./src/types.ts",
+      "default": "./dist/types.js"
     }
   },
   "devDependencies": {

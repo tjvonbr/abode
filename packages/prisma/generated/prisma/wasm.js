@@ -115,6 +115,18 @@ exports.Prisma.HomeScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.AppointmentScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  hours: 'hours',
+  date: 'date',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  homeId: 'homeId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -131,12 +143,21 @@ exports.Prisma.NullsOrder = {
 };
 exports.Role = exports.$Enums.Role = {
   USER: 'USER',
-  ADMIN: 'ADMIN'
+  ADMIN: 'ADMIN',
+  PROVIDER: 'PROVIDER'
+};
+
+exports.AppointmentType = exports.$Enums.AppointmentType = {
+  HOUSE_CLEANING: 'HOUSE_CLEANING',
+  POOL_SERVICE: 'POOL_SERVICE',
+  HANDYMAN: 'HANDYMAN',
+  OTHER: 'OTHER'
 };
 
 exports.Prisma.ModelName = {
   User: 'User',
-  Home: 'Home'
+  Home: 'Home',
+  Appointment: 'Appointment'
 };
 /**
  * Create the Client
@@ -167,7 +188,8 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null
+    "rootEnvPath": null,
+    "schemaEnvPath": "../../.env"
   },
   "relativePath": "../..",
   "clientVersion": "6.16.1",
@@ -185,13 +207,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum Role {\n  USER\n  ADMIN\n}\n\nmodel User {\n  id        String   @id @default(uuid())\n  firstName String\n  lastName  String\n  email     String   @unique\n  phone     String\n  role      Role     @default(USER)\n  homes     Home[]\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel Home {\n  id             String   @id @default(uuid())\n  streetAddress  String\n  streetAddress2 String?\n  city           String\n  state          String\n  zip            String\n  country        String\n  users          User[]\n  createdAt      DateTime @default(now())\n  updatedAt      DateTime @updatedAt\n}\n",
-  "inlineSchemaHash": "dcfc562bd554b528e9ccda84735c5a5e5a9e3d9f51077849031b7bd531d36f66",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum Role {\n  USER\n  ADMIN\n  PROVIDER\n}\n\nenum AppointmentType {\n  HOUSE_CLEANING\n  POOL_SERVICE\n  HANDYMAN\n  OTHER\n}\n\nmodel User {\n  id        String        @id @default(uuid())\n  firstName String\n  lastName  String\n  email     String        @unique\n  phone     String\n  role      Role          @default(USER)\n  homes     Home[]\n  visits    Appointment[]\n  createdAt DateTime      @default(now())\n  updatedAt DateTime      @updatedAt\n}\n\nmodel Home {\n  id             String        @id @default(uuid())\n  streetAddress  String\n  streetAddress2 String?\n  city           String\n  state          String\n  zip            String\n  country        String\n  users          User[]\n  appointments   Appointment[]\n  createdAt      DateTime      @default(now())\n  updatedAt      DateTime      @updatedAt\n}\n\nmodel Appointment {\n  id        String          @id @default(uuid())\n  type      AppointmentType\n  hours     Int\n  date      DateTime\n  startTime DateTime\n  endTime   DateTime\n  homeId    String\n  home      Home            @relation(fields: [homeId], references: [id])\n  users     User[]\n  createdAt DateTime        @default(now())\n  updatedAt DateTime        @updatedAt\n}\n",
+  "inlineSchemaHash": "5f8e39345397bf03ff3c3db9e4472b4b0a8014fa67544455a176279c3f01504b",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"firstName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lastName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"homes\",\"kind\":\"object\",\"type\":\"Home\",\"relationName\":\"HomeToUser\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Home\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"streetAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"streetAddress2\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"city\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"state\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"zip\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"country\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"HomeToUser\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"firstName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lastName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"homes\",\"kind\":\"object\",\"type\":\"Home\",\"relationName\":\"HomeToUser\"},{\"name\":\"visits\",\"kind\":\"object\",\"type\":\"Appointment\",\"relationName\":\"AppointmentToUser\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Home\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"streetAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"streetAddress2\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"city\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"state\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"zip\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"country\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"HomeToUser\"},{\"name\":\"appointments\",\"kind\":\"object\",\"type\":\"Appointment\",\"relationName\":\"AppointmentToHome\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Appointment\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"type\",\"kind\":\"enum\",\"type\":\"AppointmentType\"},{\"name\":\"hours\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"date\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"startTime\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endTime\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"homeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"home\",\"kind\":\"object\",\"type\":\"Home\",\"relationName\":\"AppointmentToHome\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"AppointmentToUser\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

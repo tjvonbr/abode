@@ -143,6 +143,18 @@ exports.Prisma.HomeScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.AppointmentScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  hours: 'hours',
+  date: 'date',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  homeId: 'homeId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -159,12 +171,21 @@ exports.Prisma.NullsOrder = {
 };
 exports.Role = exports.$Enums.Role = {
   USER: 'USER',
-  ADMIN: 'ADMIN'
+  ADMIN: 'ADMIN',
+  PROVIDER: 'PROVIDER'
+};
+
+exports.AppointmentType = exports.$Enums.AppointmentType = {
+  HOUSE_CLEANING: 'HOUSE_CLEANING',
+  POOL_SERVICE: 'POOL_SERVICE',
+  HANDYMAN: 'HANDYMAN',
+  OTHER: 'OTHER'
 };
 
 exports.Prisma.ModelName = {
   User: 'User',
-  Home: 'Home'
+  Home: 'Home',
+  Appointment: 'Appointment'
 };
 
 /**
